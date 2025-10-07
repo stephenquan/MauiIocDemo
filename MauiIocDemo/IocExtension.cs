@@ -20,6 +20,22 @@ public partial class IocExtension : BindableObject, IMarkupExtension<BindingBase
 	public object? InternalResult => (this.Type is Type t) ? IPlatformApplication.Current?.Services.GetService(t) : null;
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="IocExtension"/> class.
+	/// </summary>
+	public IocExtension()
+	{
+		this.PropertyChanged += (s, e) =>
+		{
+			switch (e.PropertyName)
+			{
+				case nameof(IocExtension.Type):
+					OnPropertyChanged(nameof(InternalResult));
+					break;
+			}
+		};
+	}
+
+	/// <summary>
 	/// Implements the ProvideValue method to return the resolved service instance.
 	/// </summary>
 	/// <param name="serviceProvider"></param>
